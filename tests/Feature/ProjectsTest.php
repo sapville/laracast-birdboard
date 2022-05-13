@@ -3,13 +3,18 @@
 namespace Tests\Feature;
 
 use App\Models\Project;
-use Illuminate\Foundation\Testing\Concerns\InteractsWithExceptionHandling;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ProjectsTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_a_project_requires_an_owner()
+    {
+        $this->post('/projects', Project::factory()->create(['owner_id' => null])->getAttributes())
+            ->assertSessionHasErrors(['owner_id']);
+    }
 
     public function test_a_user_can_create_a_project()
     {
