@@ -25,4 +25,17 @@ class ProjectsTest extends TestCase
 
     }
 
+    public function test_a_project_title_is_validated()
+    {
+        $attributes = Project::factory()->make(['title' => ''])->getAttributes();
+
+        $this->post('/projects', $attributes)->assertSessionHasErrors(['title']);
+    }
+
+    public function test_a_project_description_is_validated()
+    {
+        $attributes = Project::factory()->make(['description' => ''])->getAttributes();
+
+        $this->post('/projects', $attributes)->assertSessionHasErrors(['description']);
+    }
 }
