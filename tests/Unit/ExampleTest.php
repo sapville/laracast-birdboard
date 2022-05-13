@@ -10,6 +10,7 @@ class ExampleTest extends TestCase
      * A basic test example.
      *
      * @return void
+     * @group example
      */
     public function test_that_true_is_true()
     {

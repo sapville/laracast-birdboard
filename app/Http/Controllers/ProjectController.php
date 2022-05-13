@@ -12,6 +12,11 @@ class ProjectController extends Controller
         return view('projects.index', ['projects' => Project::all()]);
     }
 
+    public function show(Project $project)
+    {
+        return view('projects.show', ['project' => $project]);
+    }
+
     public function store(Request $request)
     {
         $attributes = $request->validate([

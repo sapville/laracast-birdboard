@@ -1,9 +1,11 @@
 <x-layout>
     <ul>
-        @foreach($projects as $project)
+        @forelse($projects as $project)
             <li>
-                <p>{{$project->title}}</p>
+                <a href="{{$project->path()}}">{{$project->title}}</a>
             </li>
-        @endforeach
+        @empty
+            <li>No projects yet</li>
+        @endforelse
     </ul>
 </x-layout>

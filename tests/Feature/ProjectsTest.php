@@ -25,6 +25,18 @@ class ProjectsTest extends TestCase
 
     }
 
+    public function test_a_user_can_see_a_project()
+    {
+        $this->withoutExceptionHandling();
+
+        $project = Project::factory()->create();
+        $this->post('/projects', $project->getAttributes());
+
+        $this->get($project->path())
+            ->assertSee($project->title)
+            ->assertSee($project->description);
+    }
+
     public function test_a_project_title_is_validated()
     {
         $attributes = Project::factory()->make(['title' => ''])->getAttributes();
