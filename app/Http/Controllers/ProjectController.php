@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
@@ -22,9 +23,10 @@ class ProjectController extends Controller
         $attributes = $request->validate([
             'title' => ['required'],
             'description' => ['required'],
-            'owner_id' => ['required'],
         ]);
-        Project::query()->create($attributes);
+
+        Auth::user()->projects()->create($attributes);
+
         return redirect('/projects');
     }
 }

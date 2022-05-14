@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\BirdBoard;
 
 use App\Models\Project;
 use Tests\TestCase;
