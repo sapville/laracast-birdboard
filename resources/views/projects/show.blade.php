@@ -1,4 +1,7 @@
-<x-layout>
-    <p>{{$project->title}}</p>
+<x-app-layout>
+    <x-slot name="header">
+        {{$project->title}}
+    </x-slot>
     <p>{{$project->description}}</p>
-</x-layout>
+    <x-back-link/>
+</x-app-layout>

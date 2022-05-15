@@ -21,7 +21,7 @@ Route::get('/', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/projects/create', [ProjectController::class, 'create']);
-    Route::get('/projects', [ProjectController::class, 'index']);
+    Route::get('/projects', [ProjectController::class, 'index'])->name('project.index');
     Route::get('/projects/{project}', [ProjectController::class, 'show']);
     Route::post('/projects', [ProjectController::class, 'store']);
 });
