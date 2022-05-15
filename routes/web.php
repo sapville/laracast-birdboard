@@ -18,15 +18,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
 Route::middleware('auth')->group(function () {
+    Route::get('/projects/create', [ProjectController::class, 'create']);
     Route::get('/projects', [ProjectController::class, 'index']);
     Route::get('/projects/{project}', [ProjectController::class, 'show']);
     Route::post('/projects', [ProjectController::class, 'store']);
-} );
+});
 
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

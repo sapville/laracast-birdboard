@@ -8,23 +8,16 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
-class ProjectsTest extends TestCase
+class ManageProjectsTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_a_guest_cannot_post_a_project()
+    public function test_a_guest_cannot_manage_a_project()
     {
         $this->post('/projects', Project::factory()->raw())->assertRedirect('/login');
-    }
-
-    public function test_a_guest_cannot_view_a_project()
-    {
         $this->get(Project::factory()->create()->path())->assertRedirect('/login');
-    }
-
-    public function test_a_guest_cannot_view_projects()
-    {
         $this->get('/projects')->assertRedirect('/login');
+        $this->get('/projects/create')->assertRedirect('/login');
     }
 
     public function test_a_user_can_create_a_project()
@@ -33,6 +26,7 @@ class ProjectsTest extends TestCase
         $this->withoutExceptionHandling();
         $attributes = Project::factory()->make(['owner_id' => Auth::user()->id])->getAttributes();
 
+        $this->get('/projects/create')->assertStatus(200);
         $this->post('/projects', $attributes)->assertRedirect('/projects');
 
         $this->assertDatabaseHas('projects', $attributes);
