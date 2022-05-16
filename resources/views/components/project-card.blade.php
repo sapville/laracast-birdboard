@@ -1,5 +1,5 @@
 @props(['project'])
-<x-card {{ $attributes }}>
+<x-card :sideline="'blue'" {{ $attributes }}>
     <div>
         <h3 class="text-lg font-bold mb-2 leading-tight">
             <a href="{{$project->path()}}">{{$project->title}}</a>
