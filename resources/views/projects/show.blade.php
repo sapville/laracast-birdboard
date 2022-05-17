@@ -11,10 +11,10 @@
                         <p>{{$task->body}}</p>
                     </x-card>
                 @endforeach
-                <x-card class="mx-0">
+                <x-card class="mx-0" :expand="true">
                     <form method="post" action="{{$project->path() . '/tasks'}}">
                         @csrf
-                        <input class="w-full text-sm p-1" name="body" placeholder="Add a new task"/>
+                        <input class="w-full p-3" name="body" placeholder="Add a new task"/>
                     </form>
                 </x-card>
             </div>
