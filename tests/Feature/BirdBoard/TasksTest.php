@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\BirdBoard;
 
+use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -33,6 +34,16 @@ class TasksTest extends TestCase
         $project = TestCase::createProject();
         $task = $project->tasks()->make(['body' => '']);
         $this->post($project->path() . '/tasks', $task->getAttributes())->assertSessionHasErrors('body');
+    }
+
+    public function test_only_the_owner_can_crate_a_task()
+    {
+        TestCase::logIn();
+        $project = Project::factory()->create();
+        $task = Task::factory()->raw();
+
+        $this->post($project->path() . '/tasks', $task)->assertStatus(403);
+        $this->assertDatabaseMissing('tasks', $task);
     }
 
 }

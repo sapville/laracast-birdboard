@@ -45,8 +45,8 @@ class ManageProjectsTest extends TestCase
 
     public function test_an_owner_can_view_only_their_projects()
     {
-        Auth::login(User::factory()->create());
-        $project = Project::factory()->create(['owner_id' => User::factory()->create()]);
+        TestCase::logIn();
+        $project = Project::factory()->create();
 
         $this->get($project->path())->assertStatus(403);
     }
