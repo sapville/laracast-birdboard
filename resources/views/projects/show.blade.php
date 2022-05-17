@@ -4,19 +4,20 @@
     </x-slot>
     <main class="flex flex-col-reverse md:flex-row">
         <div class="w-full md:w-3/4 md:mr-2">
-            @php
-                $tasks = $project->tasks;
-            @endphp
-            @if($tasks->isNotEmpty())
-                <div class="mb-6">
-                    <h2>Tasks</h2>
-                    @foreach($tasks as $task)
-                        <x-card class="mx-0">
-                            <p>{{$task->body}}</p>
-                        </x-card>
-                    @endforeach
-                </div>
-            @endif
+            <div class="mb-6">
+                <h2>Tasks</h2>
+                @foreach($project->tasks as $task)
+                    <x-card class="mx-0">
+                        <p>{{$task->body}}</p>
+                    </x-card>
+                @endforeach
+                <x-card class="mx-0">
+                    <form method="post" action="{{$project->path() . '/tasks'}}">
+                        @csrf
+                        <input class="w-full text-sm p-1" name="body" placeholder="Add a new task"/>
+                    </form>
+                </x-card>
+            </div>
             <div>
                 <h2>General Notes</h2>
                 <x-card :expand="true" class="p-0 mx-0">
