@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Project;
+use App\Models\Task;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -22,7 +23,8 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('pass'),
         ]);
 
-        Project::factory(3)->create(['owner_id' => $user->id]);
+        Project::factory()->has(Task::factory(3))->for($user, 'owner')->create();
+        Project::factory(2)->for($user, 'owner')->create();
         Project::factory(7)->create();
 
     }

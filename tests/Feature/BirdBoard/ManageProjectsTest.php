@@ -22,9 +22,8 @@ class ManageProjectsTest extends TestCase
 
     public function test_a_user_can_create_a_project()
     {
-        Auth::login(User::factory()->create());
         $this->withoutExceptionHandling();
-        $attributes = Project::factory()->make(['owner_id' => Auth::user()->id])->getAttributes();
+        $attributes = TestCase::createProject()->getAttributes();
 
         $this->get('/projects/create')->assertStatus(200);
         $this->post('/projects', $attributes)->assertRedirect('/projects');
@@ -36,9 +35,8 @@ class ManageProjectsTest extends TestCase
 
     public function test_a_user_can_see_a_project()
     {
-        Auth::login(User::factory()->create());
         $this->withoutExceptionHandling();
-        $project = Project::factory()->create(['owner_id' => Auth::id()]);
+        $project = TestCase::createProject();
 
         $this->get($project->path())
             ->assertSee($project->title)
@@ -55,7 +53,7 @@ class ManageProjectsTest extends TestCase
 
     public function test_a_project_title_is_validated()
     {
-        Auth::login(User::factory()->create());
+        TestCase::logIn();
         $attributes = Project::factory()->make(['title' => ''])->getAttributes();
 
         $this->post('/projects', $attributes)->assertSessionHasErrors(['title']);
@@ -63,7 +61,7 @@ class ManageProjectsTest extends TestCase
 
     public function test_a_project_description_is_validated()
     {
-        Auth::login(User::factory()->create());
+        TestCase::logIn();
         $attributes = Project::factory()->make(['description' => ''])->getAttributes();
 
         $this->post('/projects', $attributes)->assertSessionHasErrors(['description']);
