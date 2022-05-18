@@ -23,12 +23,15 @@ class ManageProjectsTest extends TestCase
     public function test_a_user_can_create_a_project()
     {
         $this->withoutExceptionHandling();
-        $attributes = TestCase::createProject()->getAttributes();
+        TestCase::logIn();
+
+        $attributes =Project::factory()->raw(['owner_id' => Auth::id()]);
 
         $this->get('/projects/create')->assertStatus(200);
-        $this->post('/projects', $attributes)->assertRedirect('/projects');
+        $response = $this->post('/projects', $attributes);
 
         $this->assertDatabaseHas('projects', $attributes);
+        $response->assertRedirect(Project::first()->path());
         $this->get('/projects')->assertSee($attributes['title']);
 
     }
