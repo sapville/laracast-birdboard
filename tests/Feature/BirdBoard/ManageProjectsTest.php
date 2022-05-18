@@ -3,9 +3,10 @@
 namespace Tests\Feature\BirdBoard;
 
 use App\Models\Project;
-use App\Models\User;
+use Faker\UniqueGenerator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class ManageProjectsTest extends TestCase
@@ -25,13 +26,16 @@ class ManageProjectsTest extends TestCase
         $this->withoutExceptionHandling();
         TestCase::logIn();
 
-        $attributes =Project::factory()->raw(['owner_id' => Auth::id()]);
+        $attributes =Project::factory()->raw([
+            'owner_id' => Auth::id(),
+            'description' => Str::uuid(),
+        ]);
 
         $this->get('/projects/create')->assertStatus(200);
         $response = $this->post('/projects', $attributes);
 
         $this->assertDatabaseHas('projects', $attributes);
-        $response->assertRedirect(Project::first()->path());
+        $response->assertRedirect(Project::where('description', $attributes['description'])->first()->path());
         $this->get('/projects')->assertSee($attributes['title']);
 
     }

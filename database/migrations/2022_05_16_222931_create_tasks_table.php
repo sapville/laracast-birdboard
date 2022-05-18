@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('project_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->text('body');
+            $table->boolean('completed')->default(false);
             $table->timestamps();
         });
     }

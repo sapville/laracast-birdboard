@@ -25,7 +25,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/projects', [ProjectController::class, 'index'])->name('project.index');
     Route::get('/projects/{project}', [ProjectController::class, 'show']);
     Route::post('/projects', [ProjectController::class, 'store']);
+
     Route::post('/projects/{project}/tasks', [TaskController::class, 'store']);
+    Route::patch('/projects/{project}/tasks/{task}', [TaskController::class, 'update']);
 });
 
 
