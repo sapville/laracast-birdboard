@@ -31,7 +31,7 @@ abstract class TestCase extends BaseTestCase
         $old_task ??= $project->addTask(Task::factory()->make()->body);
         $new_task ??= Task::factory()->make([
             'project_id' => $project,
-            'completed' => 1
+            'completed' => true
         ]);
         return array($project, $old_task, $new_task);
     }

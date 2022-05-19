@@ -7,8 +7,30 @@
             <div class="mb-6">
                 <h2>Tasks</h2>
                 @foreach($project->tasks as $task)
-                    <x-card class="mx-0">
-                        <p>{{$task->body}}</p>
+                    @if($errors->{$task->path()}->all())
+                    <div class="text-sm text-red-600 -mb-2">
+                        {{$errors->{$task->path()}->first('body')}}
+                    </div>
+                    @endif
+                    <x-card class="mx-0" :expand="true">
+                        <form method="post" action="{{$task->path()}}" id="{{$task->path()}}">
+                            @csrf
+                            @method('patch')
+                            <div class="flex items-center {{$errors->{$task->path()}->all() ? 'border  border-red-600' : ''}}">
+                                <input
+{{--                                    required--}}
+                                    class="w-full p-3 {{$task->completed ? 'text-gray-300' : ''}}"
+                                    name="body"
+                                    value="{{ old('body') ?? $task->body }}"/>
+                                <input
+                                    class="m-3"
+                                    type="checkbox"
+                                    name="completed"
+                                    {{$task->completed ? 'checked' : ''}}
+{{--                                    onchange="document.getElementById('{{$task->path()}}').submit()"/>--}}
+                                    onchange="this.form.submit()"/>
+                            </div>
+                        </form>
                     </x-card>
                 @endforeach
                 <x-card class="mx-0" :expand="true">

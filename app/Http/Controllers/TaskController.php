@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class TaskController extends Controller
 {
@@ -27,12 +28,15 @@ class TaskController extends Controller
         if (Auth::id() !== $project->owner_id)
             abort(403);
 
-        $attributes = $request->validate([
-           'body' => 'required'
-        ]);
+        $validator = Validator::make(
+            $request->all(),
+            ['body' => 'required'],
+            ['body.required' => 'A task description cannot be blank  ']
+        );
+        $validator->validateWithBag($task->path());
 
         $task->update([
-            'body' => $attributes['body'],
+            'body' => $validator->validated()['body'],
             'completed' => $request->has('completed')
         ]);
 

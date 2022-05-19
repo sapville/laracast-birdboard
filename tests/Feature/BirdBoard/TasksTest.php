@@ -71,7 +71,7 @@ class TasksTest extends TestCase
     {
         list(, $old_task, $new_task) = static::update_task(new_task: Task::factory()->make(['body' => '']));
 
-        $this->patch($old_task->path(), $new_task->getAttributes())->assertSessionHasErrors('body');
+        $this->patch($old_task->path(), $new_task->getAttributes())->assertSessionHasErrors(['body'], null, $old_task->path());
     }
 
     public function test_only_an_owner_can_update_a_task()
@@ -80,6 +80,8 @@ class TasksTest extends TestCase
         static::logIn();
 
         $this->patch($old_task->path(), $new_task->getAttributes())->assertStatus(403);
+
+        $this->assertDatabaseMissing('tasks', $new_task->getAttributes());
 
     }
 
