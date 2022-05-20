@@ -27,7 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/projects', [ProjectController::class, 'store']);
 
     Route::post('/projects/{project}/tasks', [TaskController::class, 'store']);
-    Route::patch('/projects/{project}/tasks/{task}', [TaskController::class, 'update']);
+    Route::patch('/tasks/{task}', [TaskController::class, 'update']);
 });
 
 

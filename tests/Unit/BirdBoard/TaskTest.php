@@ -15,6 +15,6 @@ class TaskTest extends TestCase
         $project = TestCase::createProject();
         $task = $project->tasks()->create(Task::factory()->raw());
 
-        $this->assertEquals( $project->path() . '/tasks/' . $task->id , $task->path());
+        $this->assertEquals( '/tasks/' . $task->id , $task->path());
     }
 }

@@ -12,7 +12,7 @@ class TaskController extends Controller
 {
     public function store(Project $project, Request $request)
     {
-        if (Auth::id() !== $project->owner_id)
+        if (Auth::user()->isNot($project->owner))
             abort(403);
 
         $attributes = $this->validate($request, [
@@ -23,15 +23,15 @@ class TaskController extends Controller
         return redirect($project->path());
     }
 
-    public function update(Project $project, Task $task, Request $request)
+    public function update(Task $task, Request $request)
     {
-        if (Auth::id() !== $project->owner_id)
+        if (Auth::user()->isNot($task->project->owner))
             abort(403);
 
         $validator = Validator::make(
             $request->all(),
             ['body' => 'required'],
-            ['body.required' => 'A task description cannot be blank  ']
+            ['body.required' => 'A task description cannot be blank']
         );
         $validator->validateWithBag($task->path());
 
@@ -40,6 +40,6 @@ class TaskController extends Controller
             'completed' => $request->has('completed')
         ]);
 
-        return redirect($project->path());
+        return redirect($task->project->path());
     }
 }
