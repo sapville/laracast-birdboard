@@ -25,7 +25,7 @@ class Project extends Model
 
     public function tasks(): HasMany
     {
-        return $this->hasMany(Task::class);
+        return $this->hasMany(Task::class)->orderBy('completed')->orderByDesc('updated_at');
     }
 
     public function addTask(string $body): Task
