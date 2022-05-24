@@ -59,9 +59,8 @@ class TasksTest extends TestCase
         list($project, $old_task, $new_task) = static::update_task();
         $new_task = $new_task->getAttributes();
 
-        $response = $this->patch($old_task->path(), $new_task);
+        $this->patch($old_task->path(), $new_task)->assertRedirect($project->path());
 
-        $response->assertRedirect($project->path());
         $this->assertDatabaseHas('tasks', $new_task);
         $this->get($project->path())->assertSee($new_task['body']);
 

@@ -44,7 +44,7 @@
                 <h2>General Notes</h2>
                 <x-card :expand="true" class="p-0 mx-0">
                     <textarea class="w-full border-0 -mb-2" rows="8"
-                    >Lorem Ipsum
+                    >{{$project->notes}}
                     </textarea>
                 </x-card>
             </div>

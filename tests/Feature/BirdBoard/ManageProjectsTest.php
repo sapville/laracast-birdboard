@@ -5,6 +5,7 @@ namespace Tests\Feature\BirdBoard;
 use App\Models\Project;
 use Faker\UniqueGenerator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Tests\TestCase;
@@ -23,20 +24,33 @@ class ManageProjectsTest extends TestCase
 
     public function test_a_user_can_create_a_project()
     {
-        $this->withoutExceptionHandling();
-        TestCase::logIn();
-
-        $attributes =Project::factory()->raw([
-            'owner_id' => Auth::id(),
-            'description' => Str::uuid(),
-        ]);
+        $attributes = TestCase::createProject()->getAttributes();
 
         $this->get('/projects/create')->assertStatus(200);
         $response = $this->post('/projects', $attributes);
 
         $this->assertDatabaseHas('projects', $attributes);
-        $response->assertRedirect(Project::where($attributes)->first()->path());
+        $response->assertRedirect('projects.index');
         $this->get('/projects')->assertSee($attributes['title']);
+
+    }
+
+    public function test_a_user_can_update_a_project()
+    {
+        $old_project = TestCase::createProject();
+        $new_project_attributes = TestCase::createProject(user: Auth::user())->getAttributes();
+
+        $this->patch($old_project->path(), $new_project_attributes)->assertRedirect($old_project->path());
+        $this->assertDatabaseHas('projects', $new_project_attributes);
+        $this->get($old_project->path())->assertSee(Arr::except($new_project_attributes, ['updated_at', 'created_at']));
+    }
+
+    public function test_an_owner_can_update_only_their_projects()
+    {
+        $old_project = TestCase::createProject();
+        $new_project_attributes = TestCase::createProject()->getAttributes();
+
+        $this->patch($old_project->path(), $new_project_attributes)->assertStatus(403);
 
     }
 
@@ -64,6 +78,7 @@ class ManageProjectsTest extends TestCase
         $attributes = Project::factory()->make(['title' => ''])->getAttributes();
 
         $this->post('/projects', $attributes)->assertSessionHasErrors(['title']);
+
     }
 
     public function test_a_project_description_is_validated()

@@ -19,10 +19,10 @@ abstract class TestCase extends BaseTestCase
         return $user;
     }
 
-    public static function createProject(User $user=null, bool $logon=true): Project
+    public static function createProject(array $attributes=[], User $user=null, bool $logon=true): Project
     {
         $project = $logon ? static::logIn($user)->projects() : new Project();
-        return $project->create(Project::factory()->raw());
+        return $project->create(Project::factory()->raw($attributes));
     }
 
     public static function update_task($project=null, $old_task=null, $new_task=null): array

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class ProjectController extends Controller
 {
@@ -15,7 +16,7 @@ class ProjectController extends Controller
 
     public function show(Project $project)
     {
-        abort_if($project->owner->id !== Auth::id(), 403);
+        Gate::authorize('owner-only', $project);
         return view('projects.show', ['project' => $project]);
     }
 
@@ -26,13 +27,27 @@ class ProjectController extends Controller
 
     public function store(Request $request)
     {
-        $attributes = $request->validate([
-            'title' => ['required'],
-            'description' => ['required'],
-        ]);
+        $attributes = $this->validate_project( $request);
 
-        $project = Auth::user()->projects()->create($attributes);
+        Auth::user()->projects()->create($attributes);
 
+        return redirect('projects.index');
+    }
+
+    public function update(Project $project, Request $request)
+    {
+        Gate::authorize('owner-only', $project);
+
+        $project->update($this->validate_project($request));
         return redirect($project->path());
+    }
+
+    private function validate_project(Request $request): array
+    {
+        return $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'notes' => 'nullable'
+        ]);
     }
 }
