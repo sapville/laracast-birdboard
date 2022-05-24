@@ -27,18 +27,21 @@ class ProjectController extends Controller
 
     public function store(Request $request)
     {
-        $attributes = $this->validate_project( $request);
+        $attributes = $this->validate_project($request);
 
-        Auth::user()->projects()->create($attributes);
+        $project = Auth::user()->projects()->create($attributes);
 
-        return redirect('projects.index');
+        return redirect($project->path());
     }
 
     public function update(Project $project, Request $request)
     {
         Gate::authorize('owner-only', $project);
 
-        $project->update($this->validate_project($request));
+        $request->mergeIfMissing(['title' => $project->title, 'description' => $project->description]);
+        $attributes = $this->validate_project($request);
+
+        $project->update($attributes);
         return redirect($project->path());
     }
 

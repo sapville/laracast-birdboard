@@ -29,7 +29,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::define('owner-only', function (User $user, Project $project) {
-            return $project->owner->id === Auth::id();
+            return $user->is($project->owner);
         });
     }
 }

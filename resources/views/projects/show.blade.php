@@ -8,17 +8,18 @@
                 <h2>Tasks</h2>
                 @foreach($project->tasks as $task)
                     @if($errors->{$task->path()}->all())
-                    <div class="text-sm text-red-600 -mb-2">
-                        {{$errors->{$task->path()}->first('body')}}
-                    </div>
+                        <div class="text-sm text-red-600 -mb-2">
+                            {{$errors->{$task->path()}->first('body')}}
+                        </div>
                     @endif
                     <x-card class="mx-0" :expand="true">
                         <form method="post" action="{{$task->path()}}" id="{{$task->path()}}">
                             @csrf
                             @method('patch')
-                            <div class="flex items-center {{$errors->{$task->path()}->all() ? 'border  border-red-600' : ''}}">
+                            <div
+                                class="flex items-center {{$errors->{$task->path()}->all() ? 'border  border-red-600' : ''}}">
                                 <input
-{{--                                    required--}}
+                                    {{--                                    required--}}
                                     class="w-full p-3 {{$task->completed ? 'text-gray-300' : ''}}"
                                     name="body"
                                     value="{{ old('body') ?? $task->body }}"/>
@@ -27,7 +28,7 @@
                                     type="checkbox"
                                     name="completed"
                                     {{$task->completed ? 'checked' : ''}}
-{{--                                    onchange="document.getElementById('{{$task->path()}}').submit()"/>--}}
+                                    {{--                                    onchange="document.getElementById('{{$task->path()}}').submit()"/>--}}
                                     onchange="this.form.submit()"/>
                             </div>
                         </form>
@@ -42,11 +43,15 @@
             </div>
             <div>
                 <h2>General Notes</h2>
-                <x-card :expand="true" class="p-0 mx-0">
-                    <textarea class="w-full border-0 -mb-2" rows="8"
-                    >{{$project->notes}}
-                    </textarea>
-                </x-card>
+                <form method="post" action="{{$project->path()}}">
+                    <x-card :expand="true" class="p-0 mx-0">
+                        @csrf
+                        @method('patch')
+                        <textarea class="w-full border-0 -mb-2" rows="8" name="notes" placeholder="Anything else?"
+                        >{{$project->notes}}</textarea>
+                    </x-card>
+                    <x-button>Save</x-button>
+                </form>
             </div>
         </div>
 
