@@ -5,6 +5,7 @@ namespace Tests;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,6 +35,13 @@ abstract class TestCase extends BaseTestCase
             'completed' => true
         ]);
         return array($project, $old_task, $new_task);
+    }
+
+    public static function update_project($project=null, array $attributes=[]): Model
+    {
+        $project ??= ( Project::query()->first() ?? static::createProject() );
+        $project->setRawAttributes(Project::factory()->raw($attributes));
+        return $project;
     }
 
 }

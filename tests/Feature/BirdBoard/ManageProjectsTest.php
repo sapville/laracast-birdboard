@@ -3,7 +3,6 @@
 namespace Tests\Feature\BirdBoard;
 
 use App\Models\Project;
-use Faker\UniqueGenerator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
@@ -16,10 +15,13 @@ class ManageProjectsTest extends TestCase
 
     public function test_a_guest_cannot_manage_a_project()
     {
-        $this->post('/projects', Project::factory()->raw())->assertRedirect('/login');
+        $project = Project::factory()->create();
+        $this->post('/projects', $project->getAttributes())->assertRedirect('/login');
         $this->get(Project::factory()->create()->path())->assertRedirect('/login');
         $this->get('/projects')->assertRedirect('/login');
         $this->get('/projects/create')->assertRedirect('/login');
+        $this->get($project->path() . '/edit')->assertRedirect('/login');
+        $this->patch($project->path(), Project::factory()->raw())->assertRedirect('/login');
     }
 
     public function test_a_user_can_create_a_project()
@@ -43,7 +45,9 @@ class ManageProjectsTest extends TestCase
     public function test_a_user_can_update_a_project()
     {
         $old_project = TestCase::createProject();
-        $new_project_attributes = TestCase::createProject(user: Auth::user())->getAttributes();
+        $new_project_attributes = Project::factory()->raw(['owner_id' => Auth::id()]);
+
+        $this->get($old_project->path(). '/edit')->assertStatus(200);
 
         $this->patch($old_project->path(), $new_project_attributes)->assertRedirect($old_project->path());
         $this->assertDatabaseHas('projects', $new_project_attributes);
@@ -83,6 +87,8 @@ class ManageProjectsTest extends TestCase
         $attributes = Project::factory()->make(['title' => ''])->getAttributes();
 
         $this->post('/projects', $attributes)->assertSessionHasErrors(['title']);
+        $project = static::update_project(attributes: ['title' => '']);
+        $this->patch($project->path(), $project->getAttributes())->assertSessionHasErrors('title');
 
     }
 
@@ -92,5 +98,7 @@ class ManageProjectsTest extends TestCase
         $attributes = Project::factory()->make(['description' => ''])->getAttributes();
 
         $this->post('/projects', $attributes)->assertSessionHasErrors(['description']);
+        $project = static::update_project(attributes: ['description' => '']);
+        $this->patch($project->path(), $project->getAttributes())->assertSessionHasErrors('description');
     }
 }

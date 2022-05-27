@@ -53,4 +53,9 @@ class ProjectController extends Controller
             'notes' => 'nullable'
         ]);
     }
+
+    public function edit(Project $project)
+    {
+        return view('projects.edit', ['project' => $project]);
+    }
 }

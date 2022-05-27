@@ -1,6 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
         <p><a href="/projects">My Projects</a> / {{$project->title}}</p>
+        <a href="{{$project->path() . '/edit'}}">
+            <x-button>Edit Project</x-button>
+        </a>
     </x-slot>
     <main class="flex flex-col-reverse md:flex-row">
         <div class="w-full md:w-3/4 md:mr-2">
