@@ -29,17 +29,13 @@ class ProjectController extends Controller
 
     public function store(UpdateProjectRequest $request)
     {
-        $attributes = $request->validated();
-
-        $project = Auth::user()->projects()->create($attributes);
-
+        $project = Auth::user()->projects()->create($request->validated());
         return redirect($project->path());
     }
 
     public function update(Project $project, UpdateProjectRequest $request)
     {
-        $attributes = $request->validated();
-        $project->update($attributes);
+        $project->update($request->validated());
         return redirect($project->path());
     }
 
