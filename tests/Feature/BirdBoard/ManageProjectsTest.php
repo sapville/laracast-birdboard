@@ -50,8 +50,22 @@ class ManageProjectsTest extends TestCase
         $this->get($old_project->path(). '/edit')->assertStatus(200);
 
         $this->patch($old_project->path(), $new_project_attributes)->assertRedirect($old_project->path());
+
         $this->assertDatabaseHas('projects', $new_project_attributes);
         $this->get($old_project->path())->assertSee(Arr::except($new_project_attributes, ['updated_at', 'created_at']));
+    }
+
+    public function test_a_user_can_update_notes_only()
+    {
+        $this->withoutExceptionHandling();
+
+        $project = TestCase::createProject();
+        $notes['notes'] = Project::factory()->make()->notes;
+
+        $this->patch($project->path(), $notes)->assertRedirect($project->path());
+
+        $this->assertDatabaseHas('projects', $notes);
+        $this->get($project->path())->assertSee($notes);
     }
 
     public function test_an_owner_can_update_only_their_projects()
@@ -60,7 +74,6 @@ class ManageProjectsTest extends TestCase
         $new_project_attributes = TestCase::createProject()->getAttributes();
 
         $this->patch($old_project->path(), $new_project_attributes)->assertStatus(403);
-
     }
 
     public function test_a_user_can_see_a_project()
