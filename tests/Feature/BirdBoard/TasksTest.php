@@ -14,7 +14,7 @@ class TasksTest extends TestCase
 
     public function test_a_guest_cannot_manage_a_task()
     {
-        list($project, $old_task , $new_task) = static::update_task();
+        list($project, $old_task , $new_task) = static::updateTask();
         Auth::logout();
 
         $this->post($project->path() . '/tasks', Task::factory()->raw())->assertRedirect('/login');
@@ -56,7 +56,7 @@ class TasksTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        list($project, $old_task, $new_task) = static::update_task();
+        list($project, $old_task, $new_task) = static::updateTask();
         $new_task = $new_task->getAttributes();
 
         $this->patch($old_task->path(), $new_task)->assertRedirect($project->path());
@@ -68,14 +68,14 @@ class TasksTest extends TestCase
 
     public function test_an_updated_task_must_be_validated()
     {
-        list(, $old_task, $new_task) = static::update_task(new_task: Task::factory()->make(['body' => '']));
+        list(, $old_task, $new_task) = static::updateTask(new_task: Task::factory()->make(['body' => '']));
 
         $this->patch($old_task->path(), $new_task->getAttributes())->assertSessionHasErrors(['body'], null, $old_task->path());
     }
 
     public function test_only_an_owner_can_update_a_task()
     {
-        list(, $old_task, $new_task) = static::update_task();
+        list(, $old_task, $new_task) = static::updateTask();
         static::logIn();
 
         $this->patch($old_task->path(), $new_task->getAttributes())->assertStatus(403);

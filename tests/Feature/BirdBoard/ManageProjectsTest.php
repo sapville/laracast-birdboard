@@ -100,7 +100,7 @@ class ManageProjectsTest extends TestCase
         $attributes = Project::factory()->make(['title' => ''])->getAttributes();
 
         $this->post('/projects', $attributes)->assertSessionHasErrors(['title']);
-        $project = static::update_project(attributes: ['title' => '']);
+        $project = static::updateProject(attributes: ['title' => '']);
         $this->patch($project->path(), $project->getAttributes())->assertSessionHasErrors('title');
 
     }
@@ -111,7 +111,7 @@ class ManageProjectsTest extends TestCase
         $attributes = Project::factory()->make(['description' => ''])->getAttributes();
 
         $this->post('/projects', $attributes)->assertSessionHasErrors(['description']);
-        $project = static::update_project(attributes: ['description' => '']);
+        $project = static::updateProject(attributes: ['description' => '']);
         $this->patch($project->path(), $project->getAttributes())->assertSessionHasErrors('description');
     }
 }

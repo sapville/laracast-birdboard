@@ -26,7 +26,7 @@ abstract class TestCase extends BaseTestCase
         return $project->create(Project::factory()->raw($attributes));
     }
 
-    public static function update_task($project=null, $old_task=null, $new_task=null): array
+    public static function updateTask($project=null, $old_task=null, $new_task=null): array
     {
         $project ??= static::createProject();
         $old_task ??= $project->addTask(Task::factory()->make()->body);
@@ -37,10 +37,11 @@ abstract class TestCase extends BaseTestCase
         return array($project, $old_task, $new_task);
     }
 
-    public static function update_project($project=null, array $attributes=[]): Model
+    public static function updateProject(array $attributes=[], $project=null): Model
     {
-        $project ??= ( Project::query()->first() ?? static::createProject() );
-        $project->setRawAttributes(Project::factory()->raw($attributes));
+        $project ??= static::createProject();
+        $new_attributes = Project::factory()->raw($attributes);
+        $project->setRawAttributes(array_merge(['id' => $project->id], $new_attributes));
         return $project;
     }
 

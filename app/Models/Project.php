@@ -23,6 +23,11 @@ class Project extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function activities(): HasMany
+    {
+        return $this->hasMany(Activity::class);
+    }
+
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class)->orderBy('completed')->orderByDesc('updated_at');
