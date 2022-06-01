@@ -9,19 +9,11 @@ class ProjectObserver
 {
     public function created(Project $project)
     {
-        $this->register($project, 'created');
+        $project->createActivity('created');
     }
 
     public function updated(Project $project)
     {
-        $this->register($project, 'updated');
-    }
-
-    protected function register(Project $project, string $description ): void
-    {
-        Activity::create([
-            'project_id' => $project->id,
-            'description' => $description,
-        ]);
+        $project->createActivity('updated');
     }
 }

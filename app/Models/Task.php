@@ -15,6 +15,21 @@ class Task extends Model
 
     protected $touches = ['project'];
 
+    protected $casts = [
+        'completed' => 'boolean'
+    ];
+
+    protected static function booted()
+    {
+        static::created(function (Task $task) {
+            $task->project->createActivity('task_created');
+        });
+
+        static::updated(function (Task $task) {
+            $task->project->createActivity('task_updated');
+        });
+    }
+
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
@@ -23,5 +38,10 @@ class Task extends Model
     public function path()
     {
         return '/tasks/' . $this->id;
+    }
+
+    public function complete()
+    {
+        $this->update(['completed' => true]);
     }
 }

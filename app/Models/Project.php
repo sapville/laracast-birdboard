@@ -37,4 +37,12 @@ class Project extends Model
     {
         return $this->tasks()->create(['body' => $body]);
     }
+
+    public function createActivity(string $description)
+    {
+        Activity::create([
+            'project_id' => $this->id,
+            'description' => $description,
+        ]);
+    }
 }
