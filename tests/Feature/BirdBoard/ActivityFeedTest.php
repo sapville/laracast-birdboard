@@ -59,6 +59,26 @@ class ActivityFeedTest extends TestCase
 
     }
 
+    public function test_task_can_be_completed_and_incompleted()
+    {
+        $this->withoutExceptionHandling();
+
+        $task = static::createProject()->addTask(Task::factory()->make()->body);
+
+        $this->assertFalse($task->fresh()->completed);
+        $this->patch($task->path(), [
+            'body' => $task->body,
+            'completed' => true
+        ]);
+        $this->assertTrue($task->fresh()->completed);
+
+        $this->patch($task->path(), [
+            'body' => $task->body,
+        ]);
+        $this->assertFalse($task->fresh()->completed);
+
+    }
+
 
 
 }

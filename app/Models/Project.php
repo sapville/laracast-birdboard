@@ -40,9 +40,6 @@ class Project extends Model
 
     public function createActivity(string $description)
     {
-        Activity::create([
-            'project_id' => $this->id,
-            'description' => $description,
-        ]);
+        $this->activities()->create(['description' => $description]);
     }
 }
