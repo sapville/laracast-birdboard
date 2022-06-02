@@ -1,3 +1,6 @@
+@php
+    use Illuminate\Support\Carbon;
+@endphp
 <x-app-layout>
     <x-slot name="header">
         <p><a href="/projects">My Projects</a> / {{$project->title}}</p>
@@ -22,7 +25,7 @@
                             <div
                                 class="flex items-center {{$errors->{$task->path()}->all() ? 'border  border-red-600' : ''}}">
                                 <input
-                                    {{--                                    required--}}
+                                    required
                                     class="w-full p-3 {{$task->completed ? 'text-gray-300' : ''}}"
                                     name="body"
                                     value="{{ old('body') ?? $task->body }}"/>
@@ -61,6 +64,16 @@
         <div class="w-full mb-6 md:w-1/4 md:ml-1">
             <h2 class="hidden md:block"><br></h2>
             <x-project-card class="mx-0" :project="$project"/>
+            <x-card class="text-sm mx-0 border-l-4 border-transparent hidden md:block">
+                <li class="list-none">
+                    @foreach($project->activities as $activity)
+                        <ul class="mb-1 last:mb-0">
+                            {{$activity->description}}
+                            <span class="text-gray-300">{{$activity->updated_at->diffForHumans(syntax: Carbon::DIFF_ABSOLUTE)}}</span>
+                        </ul>
+                    @endforeach
+                </li>
+            </x-card>
         </div>
     </main>
 </x-app-layout>
