@@ -36,7 +36,7 @@ class TaskController extends Controller
 
         $task->update([
             'body' => $validator->validated()['body'],
-            'completed' => $request->has('completed')
+            'completed' => $request->boolean('completed')
         ]);
 
         return redirect($task->project->path());

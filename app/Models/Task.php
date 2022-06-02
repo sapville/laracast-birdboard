@@ -19,17 +19,6 @@ class Task extends Model
         'completed' => 'boolean'
     ];
 
-    protected static function booted()
-    {
-        static::created(function (Task $task) {
-            $task->project->createActivity('task_created');
-        });
-
-        static::updated(function (Task $task) {
-            $task->project->createActivity('task_updated');
-        });
-    }
-
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
