@@ -13,6 +13,8 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
+    protected $seed = true;
+
     public static function logIn(User $user = null): User
     {
         $user ??= User::factory()->create();

@@ -3,12 +3,15 @@
 namespace Tests\Feature\BirdBoard;
 
 use App\Models\Task;
+use Database\Seeders\ActivityTextSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class RegisterActivityTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected $seeder = ActivityTextSeeder::class;
 
     public function test_project_create()
     {
@@ -17,7 +20,7 @@ class RegisterActivityTest extends TestCase
 
         $this->assertCount(1, $project->activities);
         $this->assertDatabaseHas('activities', $activity);
-        $this->assertEquals('created', $activity['description']);
+        $this->assertEquals('project_created', $activity['description']);
     }
 
     public function test_project_update()
@@ -28,7 +31,7 @@ class RegisterActivityTest extends TestCase
 
         $this->assertCount(2, $project->activities);
         $this->assertDatabaseHas('activities', $activity);
-        $this->assertEquals('updated', $activity['description']);
+        $this->assertEquals('project_updated', $activity['description']);
 
     }
 

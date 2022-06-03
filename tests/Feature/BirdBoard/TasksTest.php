@@ -4,6 +4,7 @@ namespace Tests\Feature\BirdBoard;
 
 use App\Models\Project;
 use App\Models\Task;
+use Database\Seeders\ActivityTextSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
@@ -11,6 +12,8 @@ use Tests\TestCase;
 class TasksTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected $seeder = ActivityTextSeeder::class;
 
     public function test_a_guest_cannot_manage_a_task()
     {

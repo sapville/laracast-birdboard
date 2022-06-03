@@ -3,6 +3,7 @@
 namespace Tests\Feature\BirdBoard;
 
 use App\Models\Project;
+use Database\Seeders\ActivityTextSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +13,8 @@ use Tests\TestCase;
 class ManageProjectsTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected $seeder = ActivityTextSeeder::class;
 
     public function test_a_guest_cannot_manage_a_project()
     {

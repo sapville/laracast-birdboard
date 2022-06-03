@@ -68,7 +68,7 @@
                 <li class="list-none">
                     @foreach($project->activities as $activity)
                         <ul class="mb-1 last:mb-0">
-                            {{$activity->description}}
+                            {{$activity->activityText->text}}
                             <span class="text-gray-300">{{$activity->updated_at->diffForHumans(syntax: Carbon::DIFF_ABSOLUTE)}}</span>
                         </ul>
                     @endforeach
