@@ -66,9 +66,9 @@
             <x-project-card class="mx-0" :project="$project"/>
             <x-card class="text-sm mx-0 border-l-4 border-transparent hidden md:block">
                 <li class="list-none">
-                    @foreach($project->activities as $activity)
+                    @foreach($project->activity as $activity)
                         <ul class="mb-1 last:mb-0">
-                            {{$activity->activityText->text}}
+                            You {{$activity->description}} {{$activity->recordable_type === \App\Models\Project::class ? 'project' : 'task'}}
                             <span class="text-gray-300">{{$activity->updated_at->diffForHumans(syntax: Carbon::DIFF_ABSOLUTE)}}</span>
                         </ul>
                     @endforeach

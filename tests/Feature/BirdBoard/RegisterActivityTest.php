@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\BirdBoard;
 
+use App\Models\Activity;
 use App\Models\Task;
-use Database\Seeders\ActivityTextSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -11,41 +11,46 @@ class RegisterActivityTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected $seeder = ActivityTextSeeder::class;
-
     public function test_project_create()
     {
         $project = static::createProject();
-        $activity = $project->activities->first()->getAttributes();
 
         $this->assertCount(1, $project->activities);
-        $this->assertDatabaseHas('activities', $activity);
-        $this->assertEquals('project_created', $activity['description']);
+        tap($project->activities->first(), function (Activity $activity) use ($project) {
+            $this->assertDatabaseHas('activities', $activity->getAttributes());
+            $this->assertEquals('created', $activity->description);
+            $this->assertTrue($activity->recordable->is($project));
+        });
     }
 
     public function test_project_update()
     {
         $project = static::updateProject();
         $project->update();
-        $activity = $project->activities->last()->getAttributes();
 
         $this->assertCount(2, $project->activities);
-        $this->assertDatabaseHas('activities', $activity);
-        $this->assertEquals('project_updated', $activity['description']);
+        tap($project->activities->last(), function (Activity $activity) use ($project) {
+            $this->assertDatabaseHas('activities', $activity->getAttributes());
+            $this->assertEquals('updated', $activity->description);
+            $this->assertTrue($activity->recordable->is($project));
+        });
 
     }
 
     public function test_task_create()
     {
         $project = static::createProject();
-        $task = Task::factory()->raw();
 
-        $this->post($project->path() . '/tasks', $task);
-        $activity = $project->activities->last()->getAttributes();
+        $this->post($project->path() . '/tasks', Task::factory()->raw());
+        $task = $project->fresh()->tasks->last();
 
-        $this->assertCount(2, $project->activities);
-        $this->assertDatabaseHas('activities', $activity);
-        $this->assertEquals('task_created', $activity['description']);
+        $this->assertCount(1, $task->activities);
+        $this->assertCount(1, $project->activities);
+        tap($task->activities->last(), function (Activity $activity) use ($task) {
+            $this->assertDatabaseHas('activities', $activity->getAttributes());
+            $this->assertEquals('created', $activity->description);
+            $this->assertTrue($activity->recordable->is($task));
+        });
 
     }
 
@@ -54,53 +59,66 @@ class RegisterActivityTest extends TestCase
         list($project, $old_task, $new_task) = static::updateTask();
 
         $this->patch($old_task->path(), ['body' => $new_task->body]);
-        $activity = $project->activities->last()->getAttributes();
+        $task = $project->fresh()->tasks->last();
 
-        $this->assertCount(3, $project->activities);
-        $this->assertDatabaseHas('activities', $activity);
-        $this->assertEquals('task_updated', $activity['description']);
+        $this->assertCount(1, $project->activities);
+        $this->assertCount(2, $task->activities);
+        tap($task->activities->last(), function (Activity $activity) use ($task) {
+            $this->assertDatabaseHas('activities', $activity->getAttributes());
+            $this->assertTrue($activity->recordable->is($task));
+            $this->assertEquals('updated', $activity['description']);
+        });
 
     }
 
     public function test_task_deleted()
     {
-        list($project, $old_task, ) = static::updateTask();
+        list($project, $task,) = static::updateTask();
 
-        $old_task->delete();
-        $activity = $project->activities->last()->getAttributes();
+        $task->delete();
 
-        $this->assertCount(3, $project->activities);
-        $this->assertDatabaseHas('activities', $activity);
-        $this->assertEquals('task_deleted', $activity['description']);
+        $this->assertCount(1, $project->activities);
+        $this->assertCount(2, $task->activities);
+        $this->assertCount(3, $project->activity);
+        tap($task->activities->last(), function (Activity $activity) use ($task) {
+            $this->assertDatabaseHas('activities', $activity->getAttributes());
+            $this->assertEquals(Task::class, $activity->recordable_type);
+            $this->assertEquals('deleted', $activity['description']);
+        });
 
     }
 
-
     public function test_task_completed()
     {
-        list($project, $old_task, ) = static::updateTask();
-        $old_task->completed = true;
-        $this->patch($old_task->path(), $old_task->getAttributes());
-        $activity = $project->activities->last()->getAttributes();
+        list($project, $task,) = static::updateTask();
+        $task->completed = true;
+        $this->patch($task->path(), $task->getAttributes());
 
-        $this->assertCount(3, $project->activities);
-        $this->assertDatabaseHas('activities', $activity);
-        $this->assertEquals('task_completed', $activity['description']);
+        $this->assertCount(3, $project->activity);
+        $this->assertCount(2, $task->activities);
+        tap($task->activities->last(), function (Activity $activity) use ($task) {
+            $this->assertDatabaseHas('activities', $activity->getAttributes());
+            $this->assertEquals('completed', $activity['description']);
+            $this->assertTrue(($activity->recordable->is($task)));
+        });
 
     }
 
     public function test_task_uncompleted()
     {
-        list($project, $old_task, ) = static::updateTask();
-        $old_task->complete();
-        $old_task->completed = false;
-        $this->patch($old_task->path(), $old_task->getAttributes());
+        list($project, $task,) = static::updateTask();
+        $task->complete();
+        $task->completed = false;
+        $this->patch($task->path(), $task->getAttributes());
 
-        $activity = $project->activities->last()->getAttributes();
 
-        $this->assertCount(4, $project->activities);
-        $this->assertDatabaseHas('activities', $activity);
-        $this->assertEquals('task_uncompleted', $activity['description']);
+        $this->assertCount(4, $project->activity);
+        $this->assertCount(3, $task->activities);
+        tap($task->activities->last(), function (Activity $activity) use ($task) {
+            $this->assertDatabaseHas('activities', $activity->getAttributes());
+            $this->assertEquals('uncompleted', $activity['description']);
+            $this->assertTrue(($activity->recordable->is($task)));
+        });
     }
 
     public function test_task_updated_and_completed()
@@ -108,9 +126,15 @@ class RegisterActivityTest extends TestCase
         list($project, $old_task, $new_task) = static::updateTask();
         $this->patch($old_task->path(), $new_task->getAttributes());
 
-        $this->assertCount(4, $project->activities);
-        $this->assertEquals('task_updated', $project->activities[2]->description);
-        $this->assertEquals('task_completed', $project->activities[3]->description);
+        $this->assertCount(4, $project->activity);
+        tap($old_task->activities[1], function ($activity) use ($old_task) {
+            $this->assertEquals('updated', $activity->description);
+            $this->assertTrue($activity->recordable->is($old_task));
+        });
+        tap($old_task->activities[2], function ($activity) use ($old_task) {
+            $this->assertEquals('completed', $activity->description);
+            $this->assertTrue($activity->recordable->is($old_task));
+        });
 
     }
 
@@ -121,9 +145,15 @@ class RegisterActivityTest extends TestCase
         $new_task->completed = false;
         $this->patch($old_task->path(), $new_task->getAttributes());
 
-        $this->assertCount(5, $project->activities);
-        $this->assertEquals('task_updated', $project->activities[3]->description);
-        $this->assertEquals('task_uncompleted', $project->activities[4]->description);
+        $this->assertCount(5, $project->activity);
+        tap($old_task->activities[2], function ($activity) use ($old_task) {
+            $this->assertEquals('updated', $activity->description);
+            $this->assertTrue($activity->recordable->is($old_task));
+        });
+        tap($old_task->activities[3], function ($activity) use ($old_task) {
+            $this->assertEquals('uncompleted', $activity->description);
+            $this->assertTrue($activity->recordable->is($old_task));
+        });
     }
 }
 

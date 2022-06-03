@@ -9,11 +9,11 @@ class ProjectObserver
 {
     public function created(Project $project)
     {
-        $project->createActivity('project_created');
+        $project->createActivity('created');
     }
 
     public function updated(Project $project)
     {
-        $project->createActivity('project_updated');
+        $project->createActivity('updated');
     }
 }

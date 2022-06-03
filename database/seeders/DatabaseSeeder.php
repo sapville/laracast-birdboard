@@ -18,10 +18,6 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
-        $this->call([
-           ActivityTextSeeder::class
-        ]);
-
         $user = User::factory()->create([
             'name' => 'TestUser',
             'email' => 'tst@tst.com',

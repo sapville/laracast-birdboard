@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Project extends Model
 {
@@ -23,9 +24,14 @@ class Project extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function activities(): HasMany
+    public function activity(): HasMany
     {
-        return $this->hasMany(Activity::class)->latest();
+        return $this->hasMany(Activity::class, 'project_id')->latest();
+    }
+
+    public function activities(): MorphMany
+    {
+        return $this->morphMany(Activity::class, 'recordable')->latest();
     }
 
     public function tasks(): HasMany
@@ -40,6 +46,9 @@ class Project extends Model
 
     public function createActivity(string $description)
     {
-        $this->activities()->create(['description' => $description]);
+        $this->activities()->create([
+            'project_id' => $this->id,
+            'description' => $description
+        ]);
     }
 }

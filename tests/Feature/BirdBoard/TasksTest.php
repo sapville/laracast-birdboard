@@ -13,8 +13,6 @@ class TasksTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected $seeder = ActivityTextSeeder::class;
-
     public function test_a_guest_cannot_manage_a_task()
     {
         list($project, $old_task , $new_task) = static::updateTask();

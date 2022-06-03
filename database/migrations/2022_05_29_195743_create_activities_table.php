@@ -17,8 +17,15 @@ return new class extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Project::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string('description');
+            $table->foreignId('project_id')->constrained()->cascadeOnDelete();
+            $table->morphs('recordable');
+            $table->enum('description', [
+                'created',
+                'updated',
+                'deleted',
+                'completed',
+                'uncompleted'
+            ]);
             $table->timestamps();
         });
     }

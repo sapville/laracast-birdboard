@@ -14,8 +14,6 @@ class ManageProjectsTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected $seeder = ActivityTextSeeder::class;
-
     public function test_a_guest_cannot_manage_a_project()
     {
         $project = Project::factory()->create();
