@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
+use App\Traits\RegisterActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use function Symfony\Component\Translation\t;
 
 class Task extends Model
 {
-    use HasFactory;
+    use HasFactory, RegisterActivity;
 
     protected $guarded = [];
 
@@ -43,16 +43,6 @@ class Task extends Model
     public function incomplete()
     {
         $this->update(['completed' => false]);
-    }
-
-    public function createActivity(string $description, array|null $before, array|null $after)
-    {
-        $this->activities()->create([
-            'project_id' => $this->project->id,
-            'description' => $description,
-            'before' => $before,
-            'after' => $after,
-        ]);
     }
 
 }

@@ -3,32 +3,25 @@
 namespace App\Observers;
 
 use App\Models\Task;
+use App\Traits\RegisterActivity;
 
 class TaskObserver
 {
-    protected static array $old_values = [];
+    use RegisterActivity;
+
+    public function updated(Task $task)
+    {
+        if ($task->wasChanged('body'))
+            $task->createUpdatedActivity($task);
+
+        if ($task->wasChanged('completed'))
+            $task->createUpdatedActivity($task,$task->completed ? 'completed' : 'uncompleted');
+    }
 
     public function created(Task $task)
     {
         $task->getAttribute('completed') ?: $task->setAttribute('completed', false);
         $task->createActivity('created', null, $task->getAttributes());
-    }
-
-    public function updating(Task $task)
-    {
-        static::$old_values = $task->getOriginal();
-    }
-
-    public function updated(Task $task)
-    {
-        $after = $task->getChanges();
-        $before = array_intersect_key(self::$old_values, $after);
-
-        if ($task->wasChanged('body'))
-            $task->createActivity('updated', $before, $after);
-
-        if ($task->wasChanged('completed'))
-            $task->createActivity($task->completed ? 'completed' : 'uncompleted', $before, $after);
     }
 
     public function deleted(Task $task)
