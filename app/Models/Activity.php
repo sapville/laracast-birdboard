@@ -13,6 +13,11 @@ class Activity extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'before' => 'array',
+        'after' => 'array'
+    ];
+
     public function recordable(): MorphTo
     {
         return $this->morphTo();

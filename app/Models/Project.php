@@ -44,11 +44,13 @@ class Project extends Model
         return $this->tasks()->create(['body' => $body]);
     }
 
-    public function createActivity(string $description)
+    public function createActivity(string $description, array|null $before, array|null $after)
     {
         $this->activities()->create([
             'project_id' => $this->id,
-            'description' => $description
+            'description' => $description,
+            'before' => $before,
+            'after' => $after,
         ]);
     }
 }

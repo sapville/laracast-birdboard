@@ -45,11 +45,13 @@ class Task extends Model
         $this->update(['completed' => false]);
     }
 
-    public function createActivity(string $description)
+    public function createActivity(string $description, array|null $before, array|null $after)
     {
         $this->activities()->create([
             'project_id' => $this->project->id,
-            'description' => $description
+            'description' => $description,
+            'before' => $before,
+            'after' => $after,
         ]);
     }
 

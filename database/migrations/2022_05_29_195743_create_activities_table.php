@@ -17,7 +17,7 @@ return new class extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('project_id')->nullable()->constrained()->cascadeOnDelete();
             $table->morphs('recordable');
             $table->enum('description', [
                 'created',
@@ -26,6 +26,8 @@ return new class extends Migration
                 'completed',
                 'uncompleted'
             ]);
+            $table->text('before')->nullable();
+            $table->text('after')->nullable();
             $table->timestamps();
         });
     }

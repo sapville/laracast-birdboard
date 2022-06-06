@@ -6,41 +6,34 @@ use App\Models\Task;
 
 class TaskObserver
 {
-    /**
-     * Handle the Task "created" event.
-     *
-     * @param \App\Models\Task $task
-     * @return void
-     */
+    protected static array $old_values = [];
+
     public function created(Task $task)
     {
-        $task->createActivity('created');
+        $task->getAttribute('completed') ?: $task->setAttribute('completed', false);
+        $task->createActivity('created', null, $task->getAttributes());
     }
 
-    /**
-     * Handle the Task "updated" event.
-     *
-     * @param \App\Models\Task $task
-     * @return void
-     */
+    public function updating(Task $task)
+    {
+        static::$old_values = $task->getOriginal();
+    }
+
     public function updated(Task $task)
     {
+        $after = $task->getChanges();
+        $before = array_intersect_key(self::$old_values, $after);
+
         if ($task->wasChanged('body'))
-            $task->createActivity('updated');
+            $task->createActivity('updated', $before, $after);
 
         if ($task->wasChanged('completed'))
-            $task->createActivity($task->completed ? 'completed' : 'uncompleted');
+            $task->createActivity($task->completed ? 'completed' : 'uncompleted', $before, $after);
     }
 
-    /**
-     * Handle the Task "deleted" event.
-     *
-     * @param \App\Models\Task $task
-     * @return void
-     */
     public function deleted(Task $task)
     {
-        $task->createActivity('deleted');
+        $task->createActivity('deleted', $task->getAttributes(), null);
     }
 
 }
