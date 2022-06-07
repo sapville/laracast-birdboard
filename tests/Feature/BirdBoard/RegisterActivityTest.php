@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class RegisterActivityTest extends TestCase
@@ -31,9 +32,9 @@ class RegisterActivityTest extends TestCase
 
     public function test_project_update()
     {
-        $this->withoutExceptionHandling();
-
+        DB::beginTransaction();
         $project = static::createProject();
+        DB::commit();
         $old_project = $project->replicate();
         $project->title = Project::factory()->make()->title;
         $project->notes = Project::factory()->make()->notes;

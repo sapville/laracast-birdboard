@@ -29,7 +29,7 @@ abstract class TestCase extends BaseTestCase
     public static function updateTask($project=null, $old_task=null, $new_task=null): array
     {
         $project ??= static::createProject();
-        $old_task ??= $project->addTask(Task::factory()->make()->body);
+        $old_task ??= $project->addTask(Task::factory()->make(['project_id' => $project->id])->body);
         $new_task ??= Task::factory()->make([
             'project_id' => $project,
             'completed' => true

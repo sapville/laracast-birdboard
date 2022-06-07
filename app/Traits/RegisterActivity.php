@@ -4,8 +4,8 @@ namespace App\Traits;
 
 
 use App\Models\Project;
-use App\Models\Task;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 trait RegisterActivity
 {
@@ -22,8 +22,10 @@ trait RegisterActivity
 
     public function createActivity(string $description, array|null $before, array|null $after)
     {
+        $project = $this->project ?: $this;
         $this->activities()->create([
-            'project_id' => get_class($this) === Project::class ? $this->id : $this->project_id,
+            'user_id' => $project->owner->id,
+            'project_id' => $project->id,
             'description' => $description,
             'before' => $before,
             'after' => $after,

@@ -68,7 +68,7 @@
                 <li class="list-none">
                     @foreach($project->activity as $activity)
                         <ul class="mb-1 last:mb-0">
-                            You {{$activity->description}} {{$activity->recordable_type === \App\Models\Project::class ? 'project' : $activity->recordable->body}}
+                            You {{$activity->description}} the {{$activity->showActivitySubject()}}
                             <span class="text-gray-300">{{$activity->updated_at->diffForHumans(syntax: Carbon::DIFF_ABSOLUTE)}}</span>
                         </ul>
                     @endforeach
