@@ -4,7 +4,7 @@
         <div class="flex justify-between h-16">
             <!-- Logo -->
             <div class="shrink-0 flex items-center">
-                <a href="{{ route('project.index') }}">
+                <a href="{{ route('projects.index') }}">
                     <x-application-logo class="block h-10 w-auto fill-current text-gray-600"/>
                 </a>
             </div>
@@ -62,7 +62,7 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('project.index')" :active="request()->routeIs('project.index')">
+            <x-responsive-nav-link :href="route('projects.index')" :active="request()->routeIs('project.index')">
                 {{ __('Projects') }}
             </x-responsive-nav-link>
         </div>

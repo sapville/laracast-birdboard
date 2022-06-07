@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -42,5 +41,12 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         return view('projects.edit', ['project' => $project]);
+    }
+
+    public function destroy(Project $project)
+    {
+        Gate::authorize('owner-only', $project);
+        $project->delete();
+        return redirect()->route('projects.index');
     }
 }
