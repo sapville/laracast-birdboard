@@ -117,7 +117,7 @@ class ManageProjectsTest extends TestCase
 
     public function test_a_project_title_is_validated()
     {
-        TestCase::logIn();
+        self::logIn();
         $attributes = Project::factory()->make(['title' => ''])->getAttributes();
 
         $this->post('/projects', $attributes)->assertSessionHasErrors(['title']);
@@ -128,11 +128,17 @@ class ManageProjectsTest extends TestCase
 
     public function test_a_project_description_is_validated()
     {
-        TestCase::logIn();
+        self::logIn();
         $attributes = Project::factory()->make(['description' => ''])->getAttributes();
 
         $this->post('/projects', $attributes)->assertSessionHasErrors(['description']);
         $project = static::updateProject(attributes: ['description' => '']);
         $this->patch($project->path(), $project->getAttributes())->assertSessionHasErrors('description');
+    }
+
+    public function test_a_project_can_invite_a_user()
+    {
+        $project = self::createProject();
+
     }
 }

@@ -40,9 +40,18 @@ class Project extends Model
         return $this->hasMany(Task::class)->orderBy('completed')->orderByDesc('updated_at');
     }
 
+    public function members()
+    {
+        return $this->belongsToMany(User::class, 'project_member')->using(ProjectMembers::class);
+    }
+
     public function addTask(string $body): Task
     {
         return $this->tasks()->create(['body' => $body]);
     }
 
+    public function inviteMember(User $user)
+    {
+        $this->members()->attach($user);
+    }
 }

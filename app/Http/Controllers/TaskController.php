@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,7 +12,7 @@ class TaskController extends Controller
 {
     public function store(Project $project, Request $request)
     {
-        Gate::authorize('owner-only', $project);
+        Gate::authorize('owner-member', $project);
 
         $attributes = $this->validate($request, [
             'body' => 'required'
@@ -25,7 +24,7 @@ class TaskController extends Controller
 
     public function update(Task $task, Request $request)
     {
-        Gate::authorize('owner-only', $task->project);
+        Gate::authorize('owner-member', $task->project);
 
         $validator = Validator::make(
             $request->all(),

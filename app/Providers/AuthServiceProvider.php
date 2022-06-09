@@ -31,5 +31,8 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('owner-only', function (User $user, Project $project) {
             return $user->is($project->owner);
         });
+        Gate::define('owner-member', function (User $user, Project $project) {
+            return $user->is($project->owner) || $project->members->contains($user);
+        });
     }
 }

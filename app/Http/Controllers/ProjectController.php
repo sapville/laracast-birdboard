@@ -16,7 +16,7 @@ class ProjectController extends Controller
 
     public function show(Project $project)
     {
-        Gate::authorize('owner-only', $project);
+        Gate::authorize('owner-member', $project);
 
         return view('projects.show', ['project' => $project]);
     }
