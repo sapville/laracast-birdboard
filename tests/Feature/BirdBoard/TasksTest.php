@@ -44,10 +44,11 @@ class TasksTest extends TestCase
 
     public function test_only_the_owner_can_crate_a_task()
     {
-        static::logIn();
+        self::logIn();
         $project = Project::factory()->create();
         $task = Task::factory()->raw();
 
+        self:self::logIn();
         $this->post($project->path() . '/tasks', $task)->assertStatus(403);
 
         $this->assertDatabaseMissing('tasks', $task);

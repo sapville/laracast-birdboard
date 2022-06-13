@@ -50,7 +50,7 @@ class ManageProjectsTest extends TestCase
     {
         $project = self::createProject();
 
-        $this->delete($project->path())->assertRedirect('projects.index');
+        $this->delete($project->path())->assertRedirect(route('projects.index'));
 
         $this->assertDatabaseMissing('projects', ['id' => $project->id]);
     }
@@ -109,9 +109,10 @@ class ManageProjectsTest extends TestCase
 
     public function test_an_owner_can_view_only_their_projects()
     {
-        TestCase::logIn();
+        self::logIn();
         $project = Project::factory()->create();
 
+        self::logIn();
         $this->get($project->path())->assertStatus(403);
     }
 
@@ -136,9 +137,4 @@ class ManageProjectsTest extends TestCase
         $this->patch($project->path(), $project->getAttributes())->assertSessionHasErrors('description');
     }
 
-    public function test_a_project_can_invite_a_user()
-    {
-        $project = self::createProject();
-
-    }
 }

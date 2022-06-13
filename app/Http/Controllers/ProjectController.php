@@ -11,7 +11,7 @@ class ProjectController extends Controller
 {
     public function index()
     {
-        return view('projects.index', ['projects' => Auth::user()->projects]);
+        return view('projects.index', ['projects' => Auth::user()->accessibleProjects()]);
     }
 
     public function show(Project $project)

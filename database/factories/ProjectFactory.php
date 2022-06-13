@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Project>
@@ -19,7 +20,7 @@ class ProjectFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence(),
-            'owner_id' => User::factory()->create(),
+            'owner_id' => Auth::user() ?? User::factory()->create(),
             'description' => $this->faker->paragraph(1),
             'notes' => $this->faker->text(100)
         ];

@@ -42,7 +42,7 @@ class Project extends Model
 
     public function members()
     {
-        return $this->belongsToMany(User::class, 'project_member')->using(ProjectMembers::class);
+        return $this->belongsToMany(User::class, 'project_member')->using(ProjectMembers::class)->withTimestamps();
     }
 
     public function addTask(string $body): Task

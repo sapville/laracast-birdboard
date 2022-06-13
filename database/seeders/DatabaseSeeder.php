@@ -18,14 +18,20 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
-        $user = User::factory()->create([
-            'name' => 'TestUser',
-            'email' => 'tst@tst.com',
+        $john = User::factory()->create([
+            'name' => 'john',
+            'email' => 'john@tst.com',
             'password' => Hash::make('pass'),
         ]);
 
-        Project::factory()->has(Task::factory(3))->for($user, 'owner')->create();
-        Project::factory(2)->for($user, 'owner')->create();
+        $jack = User::factory()->create([
+            'name' => 'jack',
+            'email' => 'jack@tst.com',
+            'password' => Hash::make('pass'),
+        ]);
+
+        Project::factory()->has(Task::factory(3))->for($john, 'owner')->create()->members()->attach($jack);
+        Project::factory(2)->for($jack, 'owner')->create();
         Project::factory(7)->create();
 
     }
