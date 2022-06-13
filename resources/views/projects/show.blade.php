@@ -8,7 +8,7 @@
             <x-button>Edit Project</x-button>
         </a>
     </x-slot>
-    <main class="flex flex-col-reverse md:flex-row">
+    <div class="flex flex-col-reverse md:flex-row">
         <div class="w-full md:w-3/4 md:mr-2">
             <div class="mb-6">
                 <h2>Tasks</h2>
@@ -63,17 +63,32 @@
 
         <div class="w-full mb-6 md:w-1/4 md:ml-1">
             <h2 class="hidden md:block"><br></h2>
+            <div class="flex flex-wrap">
+                <img src="{{get_avatar($project->owner->id)}}"
+                     alt="avatar"
+                     height="40"
+                     width="40"
+                     class="mr-2 mt-2">
+                @foreach($project->members as $member)
+                    <img src="{{get_avatar($member->id)}}"
+                         alt="avatar"
+                         height="40"
+                         width="40"
+                         class="mr-2 mt-2">
+                @endforeach
+            </div>
             <x-project-card class="mx-0" :project="$project"/>
             <x-card class="text-sm mx-0 border-l-4 border-transparent hidden md:block">
                 <li class="list-none">
                     @foreach($project->activity as $activity)
                         <ul class="mb-1 last:mb-0">
                             You {{$activity->description}} the {{$activity->showActivitySubject()}}
-                            <span class="text-gray-300">{{$activity->updated_at->diffForHumans(syntax: Carbon::DIFF_ABSOLUTE)}}</span>
+                            <span
+                                class="text-gray-300">{{$activity->updated_at->diffForHumans(syntax: Carbon::DIFF_ABSOLUTE)}}</span>
                         </ul>
                     @endforeach
                 </li>
             </x-card>
         </div>
-    </main>
+    </div>
 </x-app-layout>
