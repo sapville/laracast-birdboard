@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\InviteProjectMemberRequest;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class ProjectMembersController extends Controller
 {
-    public function store(Project $project, Request $request)
+    public function store(Project $project, InviteProjectMemberRequest $request)
     {
-        $user = User::whereKey($request->get('user_id'))->first();
-        if ($user)
-            $project->inviteMember($user);
+        $project->inviteMember(User::query()->where('email', $request->validated()['email'])->get()->first());
+
+        return redirect($project->path());
     }
 }
