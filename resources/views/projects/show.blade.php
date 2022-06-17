@@ -14,9 +14,9 @@
                 <h2>Tasks</h2>
                 @foreach($project->tasks as $task)
                     @error('body', $task->path())
-                        <div class="text-sm text-red-600 -mb-2">
-                            {{$errors->{$task->path()}->first('body')}}
-                        </div>
+                    <div class="text-sm text-red-600 -mb-2">
+                        {{$errors->{$task->path()}->first('body')}}
+                    </div>
                     @enderror
                     <x-card class="mx-0" :expand="true">
                         <form method="post" action="{{$task->path()}}" id="{{$task->path()}}">
@@ -81,26 +81,28 @@
             </div>
             <x-project-card class="mx-0" :project="$project"/>
 
-            <x-card class="mx-0">
-                <div class="flex flex-col">
-                    <h2 class="mb-1">Invite a Member</h2>
-                    <form method="post" action="{{$project->path() . '/members'}}">
-                        @csrf
-                        @error('email', 'invite')
-                        <div class="text-sm text-red-600">
-                            {{$errors->invite->first('email')}}
-                        </div>
-                        @enderror
-                        <input
-                            class="w-full @error('email', 'invite') border border-red-600 @else border-gray-300 @enderror"
-                            required
-                            name="email"
-                            value="{{ old('email') }}"
-                            type="email"/>
-                        <x-button class="mt-4">Invite</x-button>
-                    </form>
-                </div>
-            </x-card>
+            @if(\Illuminate\Support\Facades\Gate::allows('owner-only', $project))
+                <x-card class="mx-0">
+                    <div class="flex flex-col">
+                        <h2 class="mb-1">Invite a Member</h2>
+                        <form method="post" action="{{$project->path() . '/members'}}">
+                            @csrf
+                            @error('email', 'invite')
+                            <div class="text-sm text-red-600">
+                                {{$errors->invite->first('email')}}
+                            </div>
+                            @enderror
+                            <input
+                                class="focus:border focus:border-0 w-full @error('email', 'invite') border border-red-600 @else border-gray-300 @enderror"
+                                required
+                                name="email"
+                                value="{{ old('email') }}"
+                                type="email"/>
+                            <x-button class="mt-4">Invite</x-button>
+                        </form>
+                    </div>
+                </x-card>
+            @endif
 
             <x-card class="text-sm mx-0 border-l-4 border-transparent hidden md:block">
                 <li class="list-none">

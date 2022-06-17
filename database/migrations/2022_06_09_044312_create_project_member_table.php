@@ -18,6 +18,7 @@ return new class extends Migration
         Schema::create('project_member', function (Blueprint $table) {
             $table->foreignIdFor(Project::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->primary(['user_id', 'project_id']);
             $table->timestamps();
         });
     }

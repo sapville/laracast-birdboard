@@ -2,12 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Validator;
 
 class InviteProjectMemberRequest extends FormRequest
 {

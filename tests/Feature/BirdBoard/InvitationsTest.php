@@ -31,7 +31,8 @@ class InvitationsTest extends TestCase
 
         $this->post($project->path() . '/members', ['email' => $user->email])
             ->assertSessionHasErrors(
-                ['email' => "Email {$user->email} hasn't been registered in the system"]
+                ['email' => "Email {$user->email} hasn't been registered in the system"],
+                errorBag: 'invite'
             );
 
     }
@@ -88,6 +89,18 @@ class InvitationsTest extends TestCase
             ->assertSee($john_project->title)
             ->assertSee($project->title);
     }
+
+    public function test_only_an_owner_can_see_the_invitation_card()
+    {
+        $project = self::createProject();
+        $this->get($project->path())->assertSee('Invite a Member');
+
+        self::logIn();
+        $this->get($project->path())->assertDontSee('Invite a Member');
+
+    }
+
+
 
 
 }
