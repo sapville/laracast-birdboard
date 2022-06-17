@@ -7,6 +7,7 @@ use App\Models\Task;
 use Database\Seeders\ActivityTextSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Tests\TestCase;
 
 class TasksTest extends TestCase
@@ -72,7 +73,8 @@ class TasksTest extends TestCase
     {
         list(, $old_task, $new_task) = static::updateTask(new_task: Task::factory()->make(['body' => '']));
 
-        $this->patch($old_task->path(), $new_task->getAttributes())->assertSessionHasErrors(['body'], null, $old_task->path());
+        $this->patch($old_task->path(), $new_task->getAttributes())
+            ->assertSessionHasErrors(['body'], null, $old_task->path());
     }
 
     public function test_only_an_owner_can_update_a_task()

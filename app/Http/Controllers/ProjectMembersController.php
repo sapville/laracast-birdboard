@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\InviteProjectMemberRequest;
 use App\Models\Project;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class ProjectMembersController extends Controller
 {
