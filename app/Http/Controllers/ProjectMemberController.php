@@ -6,7 +6,7 @@ use App\Http\Requests\InviteProjectMemberRequest;
 use App\Models\Project;
 use App\Models\User;
 
-class ProjectMembersController extends Controller
+class ProjectMemberController extends Controller
 {
     public function store(Project $project, InviteProjectMemberRequest $request)
     {

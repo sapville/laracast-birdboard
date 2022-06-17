@@ -53,8 +53,6 @@ class InvitationsTest extends TestCase
 
     public function test_a_user_can_see_all_projects_they_have_been_invited_to()
     {
-        $this->withoutExceptionHandling();
-
         $project = self::createProject();
         $john_project = self::createProject(user: $john = User::factory()->create());
         $jack_project = self::createProject(user: $jack = User::factory()->create());

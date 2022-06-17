@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\ProjectMembersController;
+use App\Http\Controllers\ProjectMemberController;
 use App\Http\Controllers\TaskController;
-use App\Models\ProjectMembers;
+use App\Models\ProjectMember;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,7 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/projects/{project}/tasks', [TaskController::class, 'store']);
     Route::patch('/tasks/{task}', [TaskController::class, 'update']);
 
-    Route::post('/projects/{project}/members', [ProjectMembersController::class, 'store']);
+    Route::post('/projects/{project}/members', [ProjectMemberController::class, 'store']);
 });
 
 

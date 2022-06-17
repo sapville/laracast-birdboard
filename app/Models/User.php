@@ -52,8 +52,8 @@ class User extends Authenticatable
 
     public function invitedTo(): BelongsToMany
     {
-        return $this->belongsToMany(Project::class, 'project_member')
-            ->using(ProjectMembers::class)
+        return $this->belongsToMany(Project::class, 'project_members')
+            ->using(ProjectMember::class)
             ->withTimestamps()
             ->orderByDesc('updated_at');
     }
