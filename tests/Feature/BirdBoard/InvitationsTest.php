@@ -98,7 +98,14 @@ class InvitationsTest extends TestCase
 
     }
 
+    public function test_a_user_can_be_invited_only_once()
+    {
+        $project = self::createProject();
+        $user = User::factory()->create();
+        $project->inviteMember($user);
 
-
+        $this->post($project->path() . '/members', ['email' => $user->email])->assertSessionHasErrors('email', errorBag: 'invite');
+        $this->post($project->path() . '/members', ['email' => $project->owner->email])->assertSessionHasErrors('email', errorBag: 'invite');
+    }
 
 }
