@@ -81,7 +81,7 @@
             </div>
             <x-project-card class="mx-0" :project="$project"/>
 
-            @if(\Illuminate\Support\Facades\Gate::allows('owner-only', $project))
+            @can('owner-only', $project)
                 <x-card class="mx-0">
                     <div class="flex flex-col">
                         <h2 class="mb-1">Invite a Member</h2>
@@ -102,7 +102,7 @@
                         </form>
                     </div>
                 </x-card>
-            @endif
+            @endcan
 
             <x-card class="text-sm mx-0 border-l-4 border-transparent hidden md:block">
                 <li class="list-none">

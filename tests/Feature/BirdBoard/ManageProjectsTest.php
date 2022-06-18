@@ -28,21 +28,15 @@ class ManageProjectsTest extends TestCase
 
     public function test_a_user_can_create_a_project()
     {
-        $this->withoutExceptionHandling();
-
         TestCase::logIn();
         $attributes = Project::factory()->raw([
             'description' => Str::uuid(),
-            'owner_id' => Auth::id(),
         ]);
 
         $this->get('/projects/create')->assertStatus(200);
-        $response = $this->post('/projects', $attributes);
+        $this->followingRedirects()->post('/projects', $attributes)->assertSee($attributes);
 
         $this->assertDatabaseHas('projects', $attributes);
-        $project = Project::where('description', $attributes['description'])->first();
-        $response->assertRedirect($project->path());
-        $this->get($project->path())->assertSee($attributes);
 
     }
 
@@ -58,9 +52,13 @@ class ManageProjectsTest extends TestCase
     public function test_an_owner_can_delete_only_their_projects()
     {
         $project = self::createProject();
-        self::logIn();
+        $user = self::logIn();
 
         $this->delete($project->path())->assertStatus(403);
+
+        $project->inviteMember($user);
+        $this->delete($project->path())->assertStatus(403);
+
     }
 
     public function test_a_user_can_update_a_project()
