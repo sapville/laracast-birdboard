@@ -1,5 +1,12 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
+function withOpacity(variableName) {
+    return ({ opacityValue }) =>
+       opacityValue ?
+           `rgb(var(${variableName}) / ${opacityValue})` :
+           `rgb(var(${variableName}))`;
+}
+
 module.exports = {
     content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
@@ -12,6 +19,10 @@ module.exports = {
 
     theme: {
         extend: {
+            colors: {
+                bgMain: withOpacity('--color-bg-main'),
+                bgCard: withOpacity('--color-bg-card'),
+            },
             fontFamily: {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },

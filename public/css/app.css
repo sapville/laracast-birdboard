@@ -548,13 +548,29 @@ select {
   outline: 1px solid ButtonText;
   outline: 1px auto -webkit-focus-ring-color;
 }
+    :root {
+        --color-bg-main: 243 244 246;
+        --color-bg-card: 255 255 255;
+    }
+
+    .inverse {
+        --color-bg-main: 255 255 255;
+        --color-bg-card: 243 244 246;
+    }
+
     a {
   --tw-text-opacity: 1;
   color: rgb(96 165 250 / var(--tw-text-opacity));
 }
+
     a:hover {
   --tw-text-opacity: 1;
   color: rgb(37 99 235 / var(--tw-text-opacity));
+}
+
+    input[type=text], textarea {
+  --tw-bg-opacity: 1;
+  background-color: rgb(var(--color-bg-card) / var(--tw-bg-opacity));
 }
 
 *, ::before, ::after {
@@ -943,13 +959,21 @@ select {
   --tw-bg-opacity: 1;
   background-color: rgb(238 242 255 / var(--tw-bg-opacity));
 }
-.bg-gray-100 {
+.bg-bgMain {
   --tw-bg-opacity: 1;
-  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+  background-color: rgb(var(--color-bg-main) / var(--tw-bg-opacity));
+}
+.bg-bgCard {
+  --tw-bg-opacity: 1;
+  background-color: rgb(var(--color-bg-card) / var(--tw-bg-opacity));
 }
 .bg-blue-400 {
   --tw-bg-opacity: 1;
   background-color: rgb(96 165 250 / var(--tw-bg-opacity));
+}
+.bg-gray-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
 }
 .fill-current {
   fill: currentColor;

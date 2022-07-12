@@ -96,6 +96,7 @@
                                 class="focus:border focus:border-0 w-full @error('email', 'invite') border border-red-600 @else border-gray-300 @enderror"
                                 required
                                 name="email"
+                                placeholder="Enter an email"
                                 value="{{ old('email') }}"
                                 type="email"/>
                             <x-button class="mt-4">Invite</x-button>

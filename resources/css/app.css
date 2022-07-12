@@ -3,7 +3,21 @@
 @import 'tailwindcss/utilities';
 
 @layer base {
+    :root {
+        --color-bg-main: 243 244 246;
+        --color-bg-card: 255 255 255;
+    }
+
+    .inverse {
+        --color-bg-main: 255 255 255;
+        --color-bg-card: 243 244 246;
+    }
+
     a {
         @apply text-blue-400 hover:text-blue-600
+    }
+
+    input[type=text],textarea {
+        @apply bg-bgCard
     }
 }

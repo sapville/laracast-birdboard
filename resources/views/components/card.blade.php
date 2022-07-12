@@ -7,7 +7,7 @@
     'sideline' => 'none',
     'expand' => false,
 ])
-<div {{ $attributes->class(['flex', 'm-2', 'bg-white', 'border', 'border-gray-200', 'shadow-md']) }}>
+<div {{ $attributes->class(['flex', 'm-2', 'bg-bgCard', 'border', 'border-gray-200', 'shadow-md']) }}>
     <div class="{{$sidelines[$sideline]}}"></div>
     <div class="{{$expand ?: 'p-3'}} flex-1">
         {{$slot}}
