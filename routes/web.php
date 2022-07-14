@@ -32,6 +32,12 @@ Route::middleware('auth')->group(function () {
 });
 
 
+Route::get('/theme-toggle', function () {
+    $theme = session('theme');
+    session(['theme' => $theme ? '' : 'lightMode']);
+    return redirect()->back();
+});
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');

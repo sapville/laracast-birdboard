@@ -1,7 +1,8 @@
 <div class="flex place-items-center">
-    <button
-        {{$attributes->class(['rounded-full', 'border', 'border-black', 'bg-bgCard'])}}
-        x-data @click="$store.lightMode.toggle()"
-
-    />
+    <a href="/theme-toggle">
+        <button
+            type="submit"
+            {{$attributes->class(['rounded-full', 'border', 'border-black', 'bg-bgCard'])}}
+        ></button>
+    </a>
 </div>

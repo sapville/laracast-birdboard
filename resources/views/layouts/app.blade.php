@@ -17,7 +17,7 @@
     <script src="{{ asset('js/app.js') }}" defer></script>
 </head>
 
-<body class="font-sans antialiased bg-bgMain" x-data :class="$store.lightMode.on && 'lightMode'">
+<body class="font-sans antialiased bg-bgMain {{session('theme')}}">
     @include('layouts.navigation')
     <!-- Page Heading -->
     <header class="bg-bgCard shadow">
