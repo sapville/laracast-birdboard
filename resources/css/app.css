@@ -8,7 +8,7 @@
         --color-bg-card: 255 255 255;
     }
 
-    .inverse {
+    .lightMode {
         --color-bg-main: 255 255 255;
         --color-bg-card: 243 244 246;
     }

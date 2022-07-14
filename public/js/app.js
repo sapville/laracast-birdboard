@@ -5080,6 +5080,16 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"];
+alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].store('lightMode', {
+  init: function init() {
+    this.on = Boolean(localStorage.lightMode);
+  },
+  on: false,
+  toggle: function toggle() {
+    this.on = !this.on;
+    localStorage.lightMode = this.on ? '1' : '';
+  }
+});
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].start();
 
 /***/ }),

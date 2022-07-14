@@ -16,12 +16,11 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
 </head>
-<body class="font-sans antialiased inverse">
-<div class="min-h-screen bg-bgMain">
-    @include('layouts.navigation')
 
+<body class="font-sans antialiased bg-bgMain" x-data :class="$store.lightMode.on && 'lightMode'">
+    @include('layouts.navigation')
     <!-- Page Heading -->
-    <header class="bg-white shadow">
+    <header class="bg-bgCard shadow">
         <div class="font-semibold text-xl text-gray-800 max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center">
                 {{ $header }}
@@ -35,6 +34,5 @@
             {{ $slot }}
         </div>
     </main>
-</div>
 </body>
 </html>
