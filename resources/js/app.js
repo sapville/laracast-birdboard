@@ -1,8 +1,11 @@
 require('./bootstrap');
 
 import Alpine from 'alpinejs';
+import new_project from './new-project.js';
 
 window.Alpine = Alpine;
+
+Alpine.data('new_project', new_project);
 
 Alpine.store('lightMode',{
     init() {

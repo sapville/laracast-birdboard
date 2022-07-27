@@ -26,5 +26,5 @@
 
 <x-button>Submit</x-button>
 <a href="{{$project ? $project->path() : '/projects'}}">
-    <x-button type="button" class="bg-white border-gray-400 text-gray-700">Cancel</x-button>
+    <x-button type="button" :button-style="'bg-white border-gray-400 text-gray-700 hover:text-white'">Cancel</x-button>
 </a>
