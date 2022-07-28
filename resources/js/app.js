@@ -8,6 +8,7 @@ window.Alpine = Alpine;
 Alpine.data('new_project', new_project);
 
 Alpine.store('lightMode',{
+
     init() {
         this.on = Boolean(localStorage.lightMode);
     },

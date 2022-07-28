@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     {{--        <style>*  { border: red solid 1px; } </style>--}}
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}"></script>
 </head>
 
 <body class="font-sans antialiased bg-bgMain {{session('theme')}}">

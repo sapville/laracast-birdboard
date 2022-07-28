@@ -5143,7 +5143,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (function () {
   return {
+    errors: {
+      title: 'Something went wrong with the title',
+      description: 'Something went wrong with the description'
+    },
+    titleError: _defineProperty({}, 'x-text', function xText() {
+      return this.errors.title;
+    }),
+    descriptionError: _defineProperty({}, 'x-text', function xText() {
+      return this.errors.description;
+    }),
     open: false,
+    close: _defineProperty({}, '@click.outside', function clickOutside() {
+      this.open = !this.open;
+    }),
     trigger: _defineProperty({}, '@click', function click() {
       this.open = !this.open;
     }),
