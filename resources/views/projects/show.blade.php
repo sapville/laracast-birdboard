@@ -4,9 +4,11 @@
 <x-app-layout>
     <x-slot name="header">
         <p><a href="/projects">My Projects</a> / {{$project->title}}</p>
-        <a href="{{$project->path() . '/edit'}}">
-            <x-button>Edit Project</x-button>
-        </a>
+        @can('owner-only', $project)
+            <a href="{{$project->path() . '/edit'}}">
+                <x-button>Edit Project</x-button>
+            </a>
+        @endcan
     </x-slot>
     <div class="flex flex-col-reverse md:flex-row">
         <div class="w-full md:w-3/4 md:mr-2">
@@ -56,7 +58,9 @@
                         <textarea class="w-full border-0 -mb-2" rows="8" name="notes" placeholder="Anything else?"
                         >{{$project->notes}}</textarea>
                     </x-card>
-                    <x-button>Save</x-button>
+                    @can('owner-only', $project)
+                        <x-button>Save</x-button>
+                    @endcan
                 </form>
             </div>
         </div>
