@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->foreignId('owner_id')->constrained('users')->restrictOnDelete()->cascadeOnUpdate();
-            $table->string('title');
+            $table->string('title')->unique();
             $table->text('description');
             $table->text('notes')->nullable();
             $table->timestamps();

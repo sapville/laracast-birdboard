@@ -19,7 +19,7 @@ class ProjectFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $this->faker->sentence(),
+            'title' => $this->faker->unique()->sentence(),
             'owner_id' => Auth::user() ?? User::factory()->create(),
             'description' => $this->faker->paragraph(1),
             'notes' => $this->faker->text(100)
