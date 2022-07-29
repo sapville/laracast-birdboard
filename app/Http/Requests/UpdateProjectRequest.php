@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 
 class UpdateProjectRequest extends FormRequest
 {
@@ -25,7 +26,7 @@ class UpdateProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => ['sometimes', 'required', 'unique:projects,title'],
+            'title' => ['sometimes', 'required', Rule::unique('projects','title')->ignore($this->project)],
             'description' => ['sometimes', 'required'],
             'notes' => 'nullable'
         ];
