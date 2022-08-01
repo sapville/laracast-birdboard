@@ -5163,6 +5163,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (function () {
   return {
     open: false,
+    taskCounter: 0,
     project: {
       title: '',
       description: '',
@@ -5205,7 +5206,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               case 0:
                 request = new Request('/projects', {
                   method: 'POST',
-                  headers: new Headers([['X-Requested-With', 'XMLHttpRequest']]),
+                  headers: new Headers([['X-Requested-With', 'XMLHttpRequest'], ['X-CSRF-TOKEN', document.getElementsByName('_token')[0].value]]),
                   body: new FormData(document.getElementById('modal-form'))
                 });
                 _context.next = 3;
@@ -5233,7 +5234,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
               case 12:
                 jsonResponse = _context.sent;
-                _this.errors = jsonResponse.errors;
+                if (jsonResponse.errors) _this.errors = jsonResponse.errors;else alert('Something went wrong on the server side');
 
               case 14:
               case "end":

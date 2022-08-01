@@ -3,6 +3,7 @@
 namespace Tests\Feature\BirdBoard;
 
 use App\Models\Project;
+use App\Models\Task;
 use Database\Seeders\ActivityTextSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
@@ -39,6 +40,18 @@ class ManageProjectsTest extends TestCase
         $this->assertDatabaseHas('projects', $attributes);
 
     }
+
+    public function test_a_user_can_create_a_project_with_tasks()
+    {
+        TestCase::logIn();
+        $project = Project::factory()->make();
+        $attributes = array_merge($project->getAttributes(), ['tasks' => Task::factory(2)->raw()]);
+
+        $this->post('/projects', $attributes, ['X-Requested-With' => 'XMLHttpRequest'] )->assertStatus(200);
+
+        $this->assertDatabaseHas('tasks', $project->tasks->all());
+    }
+
 
     public function test_a_user_can_delete_a_project()
     {

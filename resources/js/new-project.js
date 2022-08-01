@@ -1,14 +1,13 @@
 export default () => ({
     open: false,
+    taskCounter: 0,
 
     project: {
         title: '',
         description: '',
-        tasks: [
-            {
-                body: '',
-            },
-        ],
+        tasks: [{
+            body: '',
+        }],
     },
 
     errors: {
@@ -42,7 +41,9 @@ export default () => ({
 
     addTask: {
       ['@click']() {
-        this.project.tasks.push({body: ''});
+        this.project.tasks.push({
+            body: ''
+        });
       }
     },
 
@@ -56,7 +57,10 @@ export default () => ({
         async ['@click.prevent']() {
             const request = new Request('/projects',{
                 method: 'POST',
-                headers: new Headers([['X-Requested-With', 'XMLHttpRequest']]),
+                headers: new Headers([
+                    ['X-Requested-With', 'XMLHttpRequest'],
+                    ['X-CSRF-TOKEN', document.getElementsByName('_token')[0].value]
+                ]),
                 body: new FormData(document.getElementById('modal-form')),
             });
             const response = await fetch(request);
@@ -64,7 +68,10 @@ export default () => ({
                 location = await response.json();
             else {
                 const jsonResponse = await response.json();
-                this.errors = jsonResponse.errors;
+                if (jsonResponse.errors)
+                    this.errors = jsonResponse.errors;
+                else
+                    alert('Something went wrong on the server side');
             }
         }
     }

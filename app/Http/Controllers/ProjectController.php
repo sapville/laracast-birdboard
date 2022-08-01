@@ -29,8 +29,12 @@ class ProjectController extends Controller
     public function store(UpdateProjectRequest $request)
     {
         $project = Auth::user()->projects()->create($request->validated());
-        if ($request->ajax())
+
+        if ($request->ajax()) {
+            if (($tasks = $request->get('tasks')) && $tasks[0]['body'])
+                $project->tasks()->createMany($tasks);
             return json_encode($project->path());
+        }
         else
             return redirect($project->path());
     }

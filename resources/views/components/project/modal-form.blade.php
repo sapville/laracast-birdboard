@@ -16,14 +16,14 @@
                                 <label class="block uppercase font-bold text-xs text-gray-700"
                                        for="title">Title</label>
                                 <input class="border border-gray-400 p-2 w-full text-sm"
-                                       :value="project.title"
+                                       x-model="project.title"
                                        type="text" name="title" id="title"
                                 >
                                 <p x-bind="titleError" class="text-xs text-red-600"></p>
                                 <label class="block uppercase font-bold text-xs text-gray-700 mt-2"
                                        for="description">Description</label>
                                 <textarea class="border border-gray-400 p-2 w-full text-sm"
-                                          x-text="project.description"
+                                          x-model="project.description"
                                           name="description" id="description"
                                           rows="4"
                                 ></textarea>
@@ -31,13 +31,13 @@
                             </div>
                             <div class="w-1/2 ml-4">
                                 <span class="block uppercase font-bold text-xs">&nbsp;</span>
-                                <template x-for="task in project.tasks">
-                                    <input class="w-full p-2 text-sm border border-gray-400 mb-2"
-                                           :value="task.body"
-                                           type="text" name="body" id="body"
-                                           placeholder="A New Task"
-                                    >
-                                </template>
+                                    <template x-for="task in project.tasks">
+                                        <input class="w-full p-2 text-sm border border-gray-400 mb-2"
+                                               x-model="task.body"
+                                               type="text" name="tasks[][body]"
+                                               placeholder="A New Task"
+                                        >
+                                    </template>
                                 <button x-bind="addTask" type="button">
                                     <div class="flex flex-row items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
